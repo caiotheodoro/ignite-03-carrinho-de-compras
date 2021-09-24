@@ -76,7 +76,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       let product: Product[];
       product = cart.filter((item) => item.id !== productId);
 
-      if(product.length != cart.length){
+      if(product.length !== cart.length){
         setCart(product);
   
         localStorage.setItem('@RocketShoes:cart', JSON.stringify(product));
@@ -97,8 +97,10 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       const response = await api.get<Stock>(`/stock/${productId}`);
       const product = cart.find(product => product.id === productId);
 
-      if (product && response) {
-        if (product.amount < response.data.amount) {
+      if (response && product != null) {
+        if (product.amount < response.data.amount || product.amount > amount) {
+          console.log(product.amount);
+          console.log(response.data.amount);
           let list: Product[];
           list = cart.map(product => { return product.id === productId ? { ...product, amount: amount } : product });
           setCart(list);

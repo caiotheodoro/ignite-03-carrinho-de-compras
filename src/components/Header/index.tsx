@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { MdShoppingBasket } from 'react-icons/md';
 
@@ -8,7 +8,6 @@ import { useCart } from '../../hooks/useCart';
 
 const Header = (): JSX.Element => {
    const { cart } = useCart();
-   const [counter,setCounter] = useState(0)
 
    console.log(cart.length)
    console.log(cart)
