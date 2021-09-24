@@ -40,7 +40,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
       if (product) {
         if (product.amount < response.data.amount) {
-          
+
           updateProductAmount({ productId: productId, amount: product.amount + 1 });
 
         }
@@ -51,11 +51,14 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         }
 
       } else {
+
         const response = await api.get<Product>(`/products/${productId}`);
         setCart([...cart, { ...response.data, amount: 1 }]);
+        localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart));
+
       }
 
-      localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart));
+
 
       // console.log(response.data);
     } catch {
@@ -64,13 +67,13 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   };
 
 
-  
+
   const removeProduct = (productId: number) => {
     try {
       let product: Product[];
       product = cart.filter((item) => item.id !== productId);
       setCart(product);
-      updateProductAmount({ productId: productId, amount: 0 });
+  
     } catch {
       toast.error('Erro na remoção do produto');
     }
@@ -86,8 +89,13 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
       if (product && response) {
         if (product.amount < response.data.amount) {
-          setCart(cart.map(product => product.id === productId ? { ...product, amount: amount } : product));
-          localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart));
+          let list: Product[];
+          list = cart.map(product => { return product.id === productId ? { ...product, amount: amount } : product });
+          setCart(list);
+
+          localStorage.setItem('@RocketShoes:cart', JSON.stringify(list));
+        
+
         }
         else {
 
